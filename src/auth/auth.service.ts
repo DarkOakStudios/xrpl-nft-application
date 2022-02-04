@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { XummSdk } from 'xumm-sdk'
-import { fromEvent } from "rxjs";
+import { fromEvent, Subject } from "rxjs";
 import { EventEmitter } from "events";
 
 
@@ -11,19 +11,14 @@ dotenv.config();
 export class AuthService {
 
   private readonly sdk: XummSdk;
-  private readonly emitter: EventEmitter;
+  private emitter = new Subject();
 
   constructor() {
-    this.sdk = new XummSdk(process.env.XUMM_APIKEY, process.env.XUMM_APISECRET);
-    this.emitter = new EventEmitter();
+    this.sdk = new XummSdk('b3f5cf26-b26a-433a-8561-79006f7637b3', '7c52b237-eb38-4e85-acce-9e6960dea2e8'); // TODO: change to env
   }
 
-  authSubscription() {
-    return fromEvent(this.emitter, 'auth');
-  }
-
-  async auth() {
-      await this.sdk.payload.createAndSubscribe({
+  auth(): Subject<any> {
+      this.sdk.payload.createAndSubscribe({
         custom_meta: {
           instruction: 'Hello! Please sign!'
         },
@@ -31,9 +26,10 @@ export class AuthService {
           'TransactionType': 'SignIn'
         }
       }, event => {
-        this.emitter.emit('auth', event.data);
+        this.emitter.next(JSON.stringify(event.data));
       }).then(result => {
-        this.emitter.emit('auth', result.created.next.always);
-      });
+        this.emitter.next(result.created.next.always);
+      })
+      return this.emitter;
   }
 }

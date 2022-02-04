@@ -17,7 +17,13 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "aws:login": "aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 569672513829.dkr.ecr.us-east-2.amazonaws.com",
+    "aws:build": "npm run aws:login && npm run docker:build && npm run docker:tag && npm run docker:push",
+    "aws:deploy": "aws ecs update-service --cluster xrpl-cluster --service xrpl-service-ec2 --force-new-deployment --region=us-east-2",
+    "docker:build": "docker build -t xrpl-repository .",
+    "docker:tag": "docker tag xrpl-repository:latest 569672513829.dkr.ecr.us-east-2.amazonaws.com/xrpl-repository:latest",
+    "docker:push": "docker push 569672513829.dkr.ecr.us-east-2.amazonaws.com/xrpl-repository:latest"
   },
   "dependencies": {
     "@nestjs/common": "^8.1.1",
@@ -25,6 +31,7 @@
     "@nestjs/platform-express": "^8.1.1",
     "@nestjs/serve-static": "^2.2.2",
     "@nestjs/websockets": "^8.2.6",
+    "acorn": "^8.7.0",
     "dotenv": "^14.2.0",
     "hbs": "^4.2.0",
     "reflect-metadata": "^0.1.13",

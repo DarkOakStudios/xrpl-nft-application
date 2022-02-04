@@ -1,13 +1,28 @@
-FROM node:17-alpine3.14
+FROM node AS development
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY package*.json /usr/src/app
 
 RUN npm install
 
 COPY . .
 
-COPY ./dist ./dist
+RUN npm run build
 
-CMD [ "npm", "run", "start:prod"]
+FROM node as production
+
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /usr/src/app
+
+COPY package*.json /usr/src/app
+
+RUN npm install --only=production
+
+COPY . .
+
+COPY --from=development /usr/src/app/dist ./dist
+
+CMD ["node", "dist/main"]
