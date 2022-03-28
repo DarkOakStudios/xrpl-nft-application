@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "nest build && npm run copy:assets",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -23,11 +23,13 @@
     "aws:deploy": "aws ecs update-service --cluster xrpl-cluster --service xrpl-service-ec2 --force-new-deployment --region=us-east-2",
     "docker:build": "docker build -t xrpl-repository .",
     "docker:tag": "docker tag xrpl-repository:latest 569672513829.dkr.ecr.us-east-2.amazonaws.com/xrpl-repository:latest",
-    "docker:push": "docker push 569672513829.dkr.ecr.us-east-2.amazonaws.com/xrpl-repository:latest"
+    "docker:push": "docker push 569672513829.dkr.ecr.us-east-2.amazonaws.com/xrpl-repository:latest",
+    "copy:assets": "copyfiles ./static/** ./dist/"
   },
   "dependencies": {
     "@nestjs/axios": "0.0.5",
     "@nestjs/common": "^8.1.1",
+    "@nestjs/config": "^2.0.0",
     "@nestjs/core": "^8.1.1",
     "@nestjs/mongoose": "^9.0.2",
     "@nestjs/platform-express": "^8.1.1",
@@ -35,6 +37,8 @@
     "@nestjs/websockets": "^8.2.6",
     "acorn": "^8.7.0",
     "axios": "^0.25.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
     "dotenv": "^14.2.0",
     "lodash": "^4.17.21",
     "mongoose": "^6.2.1",
@@ -56,6 +60,7 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",
+    "copyfiles": "^2.4.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.1",

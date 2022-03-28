@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { XummSdk } from 'xumm-sdk';
 import { Subject, map } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+import * as xrpl from 'xrpl';
 
 @Injectable()
 export class MintService {
@@ -9,18 +10,15 @@ export class MintService {
   private emitter = new Subject();
 
   constructor(private httpService: HttpService) {
-    this.sdk = new XummSdk(
-      'b3f5cf26-b26a-433a-8561-79006f7637b3',
-      '7c52b237-eb38-4e85-acce-9e6960dea2e8',
-    ); // TODO: change to env
+    this.sdk = new XummSdk(process.env.API_KEY, process.env.API_SECRET); // TODO: change to env
   }
 
   async getTokenData(uuid: string) {
     return this.httpService
       .get(`https://xumm.app/api/v1/platform/payload/${uuid}`, {
         headers: {
-          'X-API-Key': 'b3f5cf26-b26a-433a-8561-79006f7637b3',
-          'X-API-Secret': '7c52b237-eb38-4e85-acce-9e6960dea2e8',
+          'X-API-Key': process.env.API_KEY,
+          'X-API-Secret': process.env.API_SECRET,
           'Access-Control-Allow-Origin': '*',
           Accept: 'application/json',
         },
@@ -28,7 +26,8 @@ export class MintService {
       .pipe(map((response) => response.data));
   }
 
-  mint(account: string): Subject<any> {
+  mint(account: string, URIraw: string): Subject<any> {
+    const URI = xrpl.convertStringToHex(URIraw);
     this.sdk.payload
       .createAndSubscribe(
         {
@@ -36,15 +35,14 @@ export class MintService {
             TransactionType: 'NFTokenMint',
             Account: account,
             TokenTaxon: 0,
+            URI,
           },
         } as any,
         (event) => {
-          // console.log(JSON.stringify(event.data));
           this.emitter.next(JSON.stringify(event.data));
         },
       )
       .then((result) => {
-        // console.log(JSON.stringify(result.created.next.always));
         this.emitter.next(result.created.next.always);
       });
     return this.emitter;
