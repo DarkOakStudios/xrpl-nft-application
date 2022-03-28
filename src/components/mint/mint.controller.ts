@@ -5,9 +5,7 @@ import { MintService } from './mint.service';
 
 @Controller('mint')
 export class MintController {
-  constructor(
-    private readonly mintService: MintService,
-  ) {}
+  constructor(private readonly mintService: MintService) {}
 
   @Get('/token-data/:uuid')
   async getUserData(@Param() params) {

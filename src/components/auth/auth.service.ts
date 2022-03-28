@@ -12,18 +12,15 @@ export class AuthService {
   private emitter = new Subject();
 
   constructor(private httpService: HttpService) {
-    this.sdk = new XummSdk(
-      'b3f5cf26-b26a-433a-8561-79006f7637b3',
-      '7c52b237-eb38-4e85-acce-9e6960dea2e8',
-    ); // TODO: change to env
+    this.sdk = new XummSdk(process.env.API_KEY, process.env.API_SECRET);
   }
 
   async getUserData(uuid: string) {
     return this.httpService
       .get(`https://xumm.app/api/v1/platform/payload/${uuid}`, {
         headers: {
-          'X-API-Key': 'b3f5cf26-b26a-433a-8561-79006f7637b3',
-          'X-API-Secret': '7c52b237-eb38-4e85-acce-9e6960dea2e8',
+          'X-API-Key': process.env.API_KEY,
+          'X-API-Secret': process.env.API_SECRET,
           'Access-Control-Allow-Origin': '*',
           Accept: 'application/json',
         },

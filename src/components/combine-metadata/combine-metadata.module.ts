@@ -4,6 +4,6 @@ import { CombineMetadataService } from './combine-metadata.service';
 
 @Module({
   controllers: [CombineMetadataController],
-  providers: [CombineMetadataService]
+  providers: [CombineMetadataService],
 })
 export class CombineMetadataModule {}

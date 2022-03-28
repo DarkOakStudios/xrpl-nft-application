@@ -8,7 +8,12 @@ import { ConfigModule } from '@nestjs/config';
 import { CombineMetadataModule } from './components/combine-metadata/combine-metadata.module';
 
 @Module({
-  imports: [AuthModule, MintModule, CombineMetadataModule, ConfigModule.forRoot()],
+  imports: [
+    AuthModule,
+    MintModule,
+    CombineMetadataModule,
+    ConfigModule.forRoot(),
+  ],
   controllers: [AppController, AuthController],
   providers: [AppService],
 })
