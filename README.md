@@ -1,3 +1,5 @@
-#
+# XRP Junkies NFT Minting Server
 
-You can find the related tutorial [here](https://dev.to/erezhod/setting-up-a-nestjs-project-with-docker-for-back-end-development-30lg).
+An implementation of an NFT minting server which makes use of the XLS-20d proposal for the Ripple blockchain.
+
+
