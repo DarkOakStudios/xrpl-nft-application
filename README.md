@@ -25,12 +25,12 @@ https://xumm.app/sign/9045b9ee-208b-4614-8baf-66a05fd9091a
 ...
 ```
 
-After following the link, you will see the form of authorisation:
+Direct the user to the URI given to complete the signing request. It will look like this:
 
-![Screenshot 2022-03-29 at 00.13.17.png](XRP%20Junkie%2072e5b/Screenshot_2022-03-29_at_00.13.17.png)
+<img width="866" alt="image" src="https://user-images.githubusercontent.com/5241542/164065015-82baf026-63e2-44f6-b00c-b02bea4501b8.png">
 
-1. Go to your XUMM wallet application, click on the down-middle blue button and click on “Scan QR code”;
-2. Scan the code to complete authorization;
+1. Go to your XUMM wallet application, click the blue button, and click “Scan QR code”;
+2. Scan the code ;
 3. You will receive receive a signing request:
 
 ```json
