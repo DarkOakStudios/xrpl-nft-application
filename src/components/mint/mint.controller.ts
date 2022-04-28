@@ -16,8 +16,9 @@ export class MintController {
     return { data };
   }
 
-  @Sse('sse/:account')
-  sse(@Param() parameters): Observable<any> {
-    return this.mintService.mint(parameters.account, parameters.URI);
+  // @Sse('sse/:account')
+  @Get(':account')
+  async mint(@Param() parameters): Promise<any> {
+    return await this.mintService.mint(parameters.account, parameters.URI);
   }
 }

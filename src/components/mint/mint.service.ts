@@ -26,10 +26,10 @@ export class MintService {
       .pipe(map((response) => response.data));
   }
 
-  mint(account: string, URIraw: string): Subject<any> {
+  mint(account: string, URIraw: string) {
     const URI = xrpl.convertStringToHex(URIraw);
-    this.sdk.payload
-      .createAndSubscribe(
+    return this.sdk.payload.create(
+      // .createAndSubscribe(
         {
           txjson: {
             TransactionType: 'NFTokenMint',
@@ -37,14 +37,14 @@ export class MintService {
             TokenTaxon: 0,
             URI,
           },
-        } as any,
-        (event) => {
-          this.emitter.next(JSON.stringify(event.data));
-        },
+        }
+        // (event) => {
+        //   this.emitter.next(JSON.stringify(event.data));
+        // },
       )
-      .then((result) => {
-        this.emitter.next(result.created.next.always);
-      });
-    return this.emitter;
+      // .then((result) => {
+      //   this.emitter.next(result.created.next.always);
+      // });
+    // return this.emitter;
   }
 }

@@ -14,8 +14,9 @@ export class AuthController {
     return { data };
   }
 
-  @Sse('sse')
-  sse(): Observable<any> {
-    return this.authService.auth();
+  // @Sse('sse')
+  @Get()
+  async auth(): Promise<any> {
+    return await this.authService.auth();
   }
 }

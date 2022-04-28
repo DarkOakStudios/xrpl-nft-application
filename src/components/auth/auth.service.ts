@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { XummPostPayloadResponse } from 'xumm-sdk/dist/src/types';
 import { XummSdk } from 'xumm-sdk';
 import { Subject, map } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
@@ -28,9 +29,9 @@ export class AuthService {
       .pipe(map((response) => response.data));
   }
 
-  auth(): Subject<any> {
-    this.sdk.payload
-      .createAndSubscribe(
+  auth(): Promise<XummPostPayloadResponse> {
+    return this.sdk.payload.create(
+      // .createAndSubscribe(
         {
           custom_meta: {
             instruction: 'Hello! Please sign!',
@@ -39,13 +40,13 @@ export class AuthService {
             TransactionType: 'SignIn',
           },
         },
-        (event) => {
-          this.emitter.next(JSON.stringify(event.data));
-        },
+        // (event) => {
+        //   this.emitter.next(JSON.stringify(event.data));
+        // },
       )
-      .then((result) => {
-        this.emitter.next(result.created.next.always);
-      });
-    return this.emitter;
+      // .then((result) => {
+      //   this.emitter.next(result.created.next.always);
+      // });
+    // return this.emitter;
   }
 }
