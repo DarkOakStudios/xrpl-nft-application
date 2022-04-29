@@ -10,7 +10,7 @@ export class MintService {
   private emitter = new Subject();
 
   constructor(private httpService: HttpService) {
-    this.sdk = new XummSdk(process.env.API_KEY, process.env.API_SECRET);
+    this.sdk = new XummSdk(process.env.API_KEY, process.env.API_SECRET); // TODO: change to env
   }
 
   async getTokenData(uuid: string) {
